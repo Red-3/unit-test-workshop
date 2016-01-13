@@ -87,6 +87,12 @@
 
             });
 
+            it('will clear the cache if I ask it to', function() {
+                // We want to prove that the cache was cleared,
+                // by showing that the cache remove function was called by the function under test
+                expect('How do I do this?').toBeFalsy();
+            });
+            
             it('will raise an error if there was a problem on the server', function() {
 
                 $httpBackend.expectGET(API_ROOT + '/todos').respond(500);
