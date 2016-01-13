@@ -90,9 +90,18 @@
             it('will clear the cache if I ask it to', function() {
                 // We want to prove that the cache was cleared,
                 // by showing that the cache remove function was called by the function under test
-                expect('How do I do this?').toBeFalsy();
+                var cache = $cacheFactory.get('$http');
+                spyOn(cache, 'remove');
+
+                $httpBackend.expectGET(API_ROOT + '/todos').respond(200, mockTodos);
+
+                service.getTodoItems({clearCache: true});
+
+                $httpBackend.flush();
+
+                expect(cache.remove).toHaveBeenCalledWith(API_ROOT + '/todos');
             });
-            
+
             it('will raise an error if there was a problem on the server', function() {
 
                 $httpBackend.expectGET(API_ROOT + '/todos').respond(500);
