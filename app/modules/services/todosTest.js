@@ -16,6 +16,9 @@
         var $httpBackend;
         var $cacheFactory;
 
+        var successHandler = jasmine.createSpy('success');
+        var errorHandler = jasmine.createSpy('error');
+
         var mockTodos = [
             {
                 "userId": 2,
@@ -54,6 +57,8 @@
             $httpBackend.verifyNoOutstandingExpectation();
             $httpBackend.verifyNoOutstandingRequest();
 
+            successHandler.calls.reset();
+            errorHandler.calls.reset();
         });
 
         describe('getTodoItems', function() {
@@ -62,13 +67,11 @@
 
                 $httpBackend.expectGET(API_ROOT + '/todos').respond(200, mockTodos);
 
-                service.getTodoItems().then(
-                    function(result) {
-                        expect(result).toEqual(mockTodos);
-                    }
-                );
+                service.getTodoItems().then(successHandler, errorHandler);
 
                 $httpBackend.flush();
+
+                expect(successHandler).toHaveBeenCalledWith(mockTodos);
 
             });
 
@@ -76,24 +79,26 @@
 
                 $httpBackend.expectGET(API_ROOT + '/todos').respond(500);
 
-                service.getTodoItems().then(undefined, function(err) {
-                    expect(err.status).toBe(500);
-                });
+                service.getTodoItems().then(successHandler, errorHandler);
 
                 $httpBackend.flush();
+
+                expect(errorHandler).toHaveBeenCalled();
+                expect(errorHandler.calls.mostRecent().args[0].status).toBe(500);
 
             });
 
             it('will raise an error if there is no response (e.g. timeout condition)', function() {
 
-                $httpBackend.expectGET(API_ROOT + '/todos').respond(undefined);
+                $httpBackend.expectGET(API_ROOT + '/todos').respond(0, undefined);
 
-                service.getTodoItems().then(function(result) {
-                    expect(result).toBeUndefined();
-                });
+                service.getTodoItems().then(successHandler, errorHandler);
 
                 $httpBackend.flush();
 
+                expect(errorHandler).toHaveBeenCalled();
+                expect(errorHandler.calls.mostRecent().args[0].status).toBe(0);
+                expect(errorHandler.calls.mostRecent().args[0].data).toBeUndefined();
             });
         });
 
