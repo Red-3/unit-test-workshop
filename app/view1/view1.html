@@ -1,0 +1,7 @@
+
+<div style="text-decoration: underline; font-weight: 700;">{{todos.length}} Things TODO or BEENDONE</div>
+<p/>
+<div ng-hide="todos">Loading stuff to do...</div>
+<div ng-repeat="todo in todos">
+    <div>{{todo.id}}: <span ng-hide="todo.completed" style="color:red">X</span><span ng-show="todo.completed" style="color:green">√</span> {{todo.title}}</div>
+</div>
