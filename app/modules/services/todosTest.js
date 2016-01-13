@@ -63,43 +63,45 @@
 
         describe('getTodoItems', function() {
 
-            it('will get all todo items', function() {
+            describe('when the data is available', function() {
 
-                $httpBackend.expectGET(API_ROOT + '/todos').respond(200, mockTodos);
+                beforeEach(function() {
+                    $httpBackend.expectGET(API_ROOT + '/todos').respond(200, mockTodos);
+                });
 
-                service.getTodoItems().then(successHandler, errorHandler);
+                it('will get all todo items', function() {
 
-                $httpBackend.flush();
+                    service.getTodoItems().then(successHandler, errorHandler);
 
-                expect(successHandler).toHaveBeenCalledWith(mockTodos);
+                    $httpBackend.flush();
 
-            });
+                    expect(successHandler).toHaveBeenCalledWith(mockTodos);
 
-            it('will cache the todo items', function() {
+                });
 
-                $httpBackend.expectGET(API_ROOT + '/todos').respond(200, mockTodos);
+                it('will cache the todo items', function() {
 
-                service.getTodoItems();
+                    service.getTodoItems();
 
-                $httpBackend.flush();
+                    $httpBackend.flush();
 
-                expect(service._cachedItems).toEqual(mockTodos);
+                    expect(service._cachedItems).toEqual(mockTodos);
 
-            });
+                });
 
-            it('will clear the cache if I ask it to', function() {
-                // We want to prove that the cache was cleared,
-                // by showing that the cache remove function was called by the function under test
-                var cache = $cacheFactory.get('$http');
-                spyOn(cache, 'remove');
+                it('will clear the cache if I ask it to', function() {
+                    // We want to prove that the cache was cleared,
+                    // by showing that the cache remove function was called by the function under test
+                    var cache = $cacheFactory.get('$http');
+                    spyOn(cache, 'remove');
 
-                $httpBackend.expectGET(API_ROOT + '/todos').respond(200, mockTodos);
+                    service.getTodoItems({clearCache: true});
 
-                service.getTodoItems({clearCache: true});
+                    $httpBackend.flush();
 
-                $httpBackend.flush();
+                    expect(cache.remove).toHaveBeenCalledWith(API_ROOT + '/todos');
+                });
 
-                expect(cache.remove).toHaveBeenCalledWith(API_ROOT + '/todos');
             });
 
             it('will raise an error if there was a problem on the server', function() {
