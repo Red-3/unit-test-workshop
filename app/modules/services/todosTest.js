@@ -72,29 +72,29 @@
 
             });
 
-            //it('will raise an error if there was a problem on the server', function() {
-            //
-            //    $httpBackend.expectGET(API_ROOT + '/todos').respond(500);
-            //
-            //    service.getTodoItems().then(undefined, function(err) {
-            //        expect(err.status).toBe(500);
-            //    });
-            //
-            //    $httpBackend.flush();
-            //
-            //});
+            it('will raise an error if there was a problem on the server', function() {
 
-            //it('will raise an error if there is no response (e.g. timeout condition)', function() {
-            //
-            //    $httpBackend.expectGET(API_ROOT + '/todos').respond(undefined);
-            //
-            //    service.getTodoItems().then(function(result) {
-            //        expect(result).toBeUndefined();
-            //    });
-            //
-            //    $httpBackend.flush();
-            //
-            //});
+                $httpBackend.expectGET(API_ROOT + '/todos').respond(500);
+
+                service.getTodoItems().then(undefined, function(err) {
+                    expect(err.status).toBe(500);
+                });
+
+                $httpBackend.flush();
+
+            });
+
+            it('will raise an error if there is no response (e.g. timeout condition)', function() {
+
+                $httpBackend.expectGET(API_ROOT + '/todos').respond(undefined);
+
+                service.getTodoItems().then(function(result) {
+                    expect(result).toBeUndefined();
+                });
+
+                $httpBackend.flush();
+
+            });
         });
 
     });
