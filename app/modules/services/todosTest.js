@@ -75,6 +75,18 @@
 
             });
 
+            it('will cache the todo items', function() {
+
+                $httpBackend.expectGET(API_ROOT + '/todos').respond(200, mockTodos);
+
+                service.getTodoItems();
+
+                $httpBackend.flush();
+
+                expect(service._cachedItems).toEqual(mockTodos);
+
+            });
+
             it('will raise an error if there was a problem on the server', function() {
 
                 $httpBackend.expectGET(API_ROOT + '/todos').respond(500);
