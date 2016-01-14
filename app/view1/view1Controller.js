@@ -16,6 +16,7 @@
         vm.getItems = getItems;
         vm.getAllItems = getAllItems;
         vm.getItem = getItem;
+        vm._init = init;
 
         function init() {
             getAllItems();
