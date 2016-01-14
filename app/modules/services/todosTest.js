@@ -15,6 +15,7 @@
         var service;
         var $httpBackend;
         var $cacheFactory;
+        var $timeout;
 
         var successHandler = jasmine.createSpy('success');
         var errorHandler = jasmine.createSpy('error');
@@ -43,11 +44,12 @@
 
         beforeEach(module('services'));
 
-        beforeEach(inject(function (_$http_, _$httpBackend_, _$cacheFactory_, $injector) {
+        beforeEach(inject(function (_$http_, _$httpBackend_, _$cacheFactory_, _$timeout_, $injector) {
 
             // Set up the mock http service responses
             $httpBackend = _$httpBackend_;
             $cacheFactory = _$cacheFactory_;
+            $timeout = _$timeout_;
             service = $injector.get('TodosService');
 
             _$http_.defaults.headers.common = null;
@@ -129,7 +131,16 @@
                 expect(errorHandler.calls.mostRecent().args[0].status).toBe(0);
                 expect(errorHandler.calls.mostRecent().args[0].data).toBeUndefined();
             });
+
         });
 
-    });
+        describe('getTodoItem', function() {
+            it('should only accept integers', function() {
+                service.getTodoItem('a').then(undefined, function(result){
+                    expect(result).toBe('id must be an integer');
+                });
+            });
+        });
+
+        });
 }());

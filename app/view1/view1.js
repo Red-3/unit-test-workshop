@@ -1,16 +1,15 @@
-'use strict';
+(function() {
 
-angular.module('myApp.view1', ['ngRoute', 'services'])
+    'use strict';
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/view1', {
-    templateUrl: 'view1/view1.html',
-    controller: 'View1Ctrl'
-  });
-}])
+    angular.module('myApp.view1', ['ngRoute', 'services'])
 
-.controller('View1Ctrl', ['$scope', 'TodosService', function($scope, TodosService) {
-      TodosService.getTodoItems().then(function(todos) {
-          $scope.todos = todos;
+    .config(['$routeProvider', function($routeProvider) {
+      $routeProvider.when('/view1', {
+        templateUrl: 'view1/view1.html',
+        controller: 'View1Controller',
+        controllerAs: 'vm'
       });
-}]);
+    }]);
+
+}());

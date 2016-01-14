@@ -1,7 +1,16 @@
-
-<div style="text-decoration: underline; font-weight: 700;">{{todos.length}} Things TODO or BEENDONE</div>
-<p/>
-<div ng-hide="todos">Loading stuff to do...</div>
-<div ng-repeat="todo in todos">
-    <div>{{todo.id}}: <span ng-hide="todo.completed" style="color:red">X</span><span ng-show="todo.completed" style="color:green">√</span> {{todo.title}}</div>
+<div style="margin: 20px;">
+    <div>{{vm.currentItem | json}}</div>
+    <div style="text-decoration: underline; font-weight: 700; text-transform: uppercase;">{{vm.listTitle}}</div>
+    <p/>
+    <div>
+        <button ng-click="vm.getItems(false);">Todo</button>
+        <button ng-click="vm.getItems(true);">Completed</button>
+        <button ng-click="vm.getAllTodos();">All</button>
+    </div>
+    <div ng-hide="vm.todos">Loading stuff to do...</div>
+    <ol>
+        <li ng-repeat="todo in vm.todos">
+            <span ng-hide="todo.completed" style="color:red">X</span><span ng-show="todo.completed" style="color:green">√</span> {{todo.title}}
+        </li>
+    </ol>
 </div>

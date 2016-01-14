@@ -10,6 +10,7 @@ module.exports = function(config){
       'app/modules/**/*Module.js', // Load modules first
       'app/modules/**/*.js',
       'app/components/**/*.js',
+      'app/view1/view1.js',
       'app/view*/**/*.js'
     ],
 
@@ -23,6 +24,7 @@ module.exports = function(config){
 
     preprocessors: {
         'app/modules/**/*.js': ['coverage'],
+        'app/view*/**/*.js': ['coverage'],
         'app/components/**/*.js': ['coverage']
     },
 

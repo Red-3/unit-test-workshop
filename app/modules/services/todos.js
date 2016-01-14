@@ -27,7 +27,8 @@
         var thisService = this;
 
         // Public APIs
-        this.getTodoItems= getTodoItems;
+        this.getTodoItems = getTodoItems;
+        this.getTodoItem = getTodoItem;
 
         // Function definitions
 
@@ -38,7 +39,6 @@
          * @return Function promise
          */
         function getTodoItems(options) {
-            //Does nothing yet
             var endPoint = API_ROOT + '/todos';
 
             var deferred = $q.defer();
@@ -53,7 +53,7 @@
                 .then(
                 function successHandler(response) {
                     //console.log('RESPONSE SUCCESS', response);
-                    if (response) {
+                    if (response.data) {
                         thisService._cachedItems = response.data;
                         deferred.resolve(response.data);
                     } else {
@@ -66,6 +66,32 @@
                 }
             );
 
+            return deferred.promise;
+        }
+
+        function getTodoItem(id) {
+            var deferred = $q.defer();
+
+            //Reject if id is not an integer
+            if (!typeof id === 'number' || !((id%1) === 0)) {
+                //console.log('Not an int');
+                deferred.reject('id must be an integer');
+
+            } else {
+
+                var endPoint = API_ROOT + '/todos/' + id;
+
+                $http.get(endPoint, {timeout: 10000})
+                    .then(
+                    function successHandler(response) {
+                        thisService._cachedItems = response.data;
+                        deferred.resolve(response.data);
+                    },
+                    function errorHandler(response) {
+                        deferred.reject(response);
+                    }
+                );
+            }
             return deferred.promise;
         }
 
